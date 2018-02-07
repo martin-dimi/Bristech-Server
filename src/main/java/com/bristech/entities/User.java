@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 @Table(name = "users")
 public class User {
 
+    //This is the user class
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
