@@ -25,6 +25,13 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        //TODO check if user exists
+        return userRepo.getUserByUsername(username);
+    }
+
+
+    @Override
     public void createUser(User user) {
         userRepo.save(user);
     }

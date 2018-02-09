@@ -24,7 +24,11 @@ public class UserController {
     public User getUserById(@PathVariable long id){
         System.out.println("Get user by id CALLING, id=" + id);
         return userService.getUserById(id);
-        //lolg
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/username/{username}")
+    public User getUserByUsername(@PathVariable String username){
+        return userService.getUserByUsername(username);
     }
 
     @RequestMapping(method = RequestMethod.POST)
