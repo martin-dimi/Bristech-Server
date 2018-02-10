@@ -13,6 +13,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import static com.bristech.config.ControllerConfiguration.PATH_CREATE;
+import static com.bristech.config.ControllerConfiguration.PATH_LOGIN;
+import static com.bristech.config.ControllerConfiguration.USER_MAIN_URL;
+
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -29,7 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/create").permitAll()
+                .antMatchers(USER_MAIN_URL + PATH_CREATE).permitAll()
+                .antMatchers(USER_MAIN_URL + PATH_LOGIN).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager()))

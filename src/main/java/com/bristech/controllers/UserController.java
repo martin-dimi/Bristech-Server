@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static com.bristech.config.Configuration.CLAIM_USER_ID;
-import static com.bristech.config.Configuration.HEADER;
-import static com.bristech.config.Configuration.SECRET;
+import static com.bristech.config.ControllerConfiguration.*;
+import static com.bristech.config.JWTConfiguration.*;
+
 
 @RestController
+@RequestMapping(value = USER_MAIN_URL)
 public class UserController {
 
     private UserService userService;
@@ -27,7 +28,7 @@ public class UserController {
         this.bCrypt = bCrypt;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user")
+    @RequestMapping(method = RequestMethod.GET)
     public User getUser(HttpServletRequest request){
         String token = request.getHeader(HEADER);
         long userId = Jwts.parser()
@@ -39,17 +40,17 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/users")
+    @RequestMapping(method = RequestMethod.GET, value = PATH_ALL)
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = PATH_ID)
     public User getUserById(@PathVariable long id){
         return userService.getUserById(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/create")
+    @RequestMapping(method = RequestMethod.POST, value = PATH_CREATE)
     public void createUser(@RequestBody User user){
         user.setPassword(bCrypt.encode(user.getPassword()));
         userService.createUser(user);

@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.bristech.config.ControllerConfiguration.*;
+
+
 @RestController
-@RequestMapping(value = "/events")
+@RequestMapping(value = EVENT_MAIN_URL)
 public class EventController {
 
     private final EventService eventService;
@@ -18,23 +21,23 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = PATH_ALL)
     public List<Event> getAllEvents(){
         return eventService.getAllEvents();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = PATH_ID)
     public Event getEventById(@PathVariable long id){
         return eventService.getEventById(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value = PATH_CREATE)
     public void createEvent(@RequestBody Event event){
         eventService.createEvent(event);
     }
 
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = PATH_ID)
     public void deleteEventById(@PathVariable long id){
         eventService.deleteEventById(id);
     }

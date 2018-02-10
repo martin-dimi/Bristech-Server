@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.bristech.config.Configuration.*;
+import static com.bristech.config.JWTConfiguration.*;
 
 
 class AuthorizationFilter extends BasicAuthenticationFilter {

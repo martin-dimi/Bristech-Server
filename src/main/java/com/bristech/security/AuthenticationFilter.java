@@ -18,7 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.bristech.config.Configuration.*;
+import static com.bristech.config.JWTConfiguration.*;
+
 
 class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
