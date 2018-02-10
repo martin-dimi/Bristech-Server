@@ -22,23 +22,23 @@ public class EventController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PATH_ALL)
-    public List<Event> getAllEvents(){
+    public List<Event> getAllEvents() {
         return eventService.getAllEvents();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PATH_ID)
-    public Event getEventById(@PathVariable long id){
+    public Event getEventById(@PathVariable long id) {
         return eventService.getEventById(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = PATH_CREATE)
-    public void createEvent(@RequestBody Event event){
+    public void createEvent(@RequestBody Event event) {
         eventService.createEvent(event);
     }
 
 
     @RequestMapping(method = RequestMethod.DELETE, value = PATH_ID)
-    public void deleteEventById(@PathVariable long id){
+    public void deleteEventById(@PathVariable long id) {
         eventService.deleteEventById(id);
     }
 

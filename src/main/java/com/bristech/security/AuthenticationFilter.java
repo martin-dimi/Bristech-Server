@@ -32,7 +32,7 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     /**
-     On user login request, this function calls, extracts the user data and authenticates them
+     * On user login request, this function calls, extracts the user data and authenticates them
      **/
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
@@ -55,17 +55,17 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     /**
-        Handles token creation
+     * Handles token creation
+     * Puts the user_id and user_name in the token
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult){
+                                            Authentication authResult) {
 
         //Extracting the user
         UserCredentials user = (UserCredentials) authResult.getPrincipal();
-        log.info("Creating token for userId=" + user.getId());
 
         //Creating the token
         String token = Jwts.builder()
@@ -75,6 +75,7 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
                 .compact();
 
+        log.info("User_id=" + user.getId() + " authenticated");
         //Adding token to the header of the response
         response.addHeader(HEADER, token);
     }

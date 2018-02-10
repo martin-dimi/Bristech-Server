@@ -26,7 +26,9 @@ class AuthorizationFilter extends BasicAuthenticationFilter {
         super(authenticationManager);
     }
 
-
+    /**
+     * On user request, authorises user
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -36,7 +38,7 @@ class AuthorizationFilter extends BasicAuthenticationFilter {
 
         //getting header and checking if it's valid
         String header = request.getHeader(HEADER);
-        if(header == null){
+        if (header == null) {
             log.error("Could not find token in the header");
             chain.doFilter(request, response);
             return;
@@ -47,25 +49,26 @@ class AuthorizationFilter extends BasicAuthenticationFilter {
         UsernamePasswordAuthenticationToken token = getAuthentication(request);
         SecurityContextHolder.getContext().setAuthentication(token);
         chain.doFilter(request, response);
+        log.info("User successfully authorised");
         //
     }
 
+    /**
+     * Extracts the user_name from JWT token
+     */
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER);
         if (token != null) {
-            // parse the token.
+            // parse the token
             String user = Jwts.parser()
                     .setSigningKey(SECRET.getBytes())
                     .parseClaimsJws(token)
                     .getBody()
                     .get(CLAIM_USER_NAME, String.class);
 
-            log.info("Authenticating user:" + user);
-
-
             if (user != null)
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-            }
+        }
         return null;
     }
 }

@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public User getUser(HttpServletRequest request){
+    public User getUser(HttpServletRequest request) {
         String token = request.getHeader(HEADER);
         long userId = Jwts.parser()
                 .setSigningKey(SECRET.getBytes())
@@ -41,22 +41,20 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PATH_ALL)
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PATH_ID)
-    public User getUserById(@PathVariable long id){
+    public User getUserById(@PathVariable long id) {
         return userService.getUserById(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = PATH_CREATE)
-    public void createUser(@RequestBody User user){
+    public void createUser(@RequestBody User user) {
         user.setPassword(bCrypt.encode(user.getPassword()));
         userService.createUser(user);
     }
 
     //TODO add getUserByUsername and delete with query
-
-
 }
