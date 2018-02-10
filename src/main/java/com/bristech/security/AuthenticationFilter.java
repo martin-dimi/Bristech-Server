@@ -1,71 +1,80 @@
 package com.bristech.security;
 
-import com.bristech.entities.AppUser;
+import com.bristech.entities.User;
+import com.bristech.entities.UserCredentials;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+import static com.bristech.config.Configuration.*;
 
-    //TODO Move to properties
-    public static final long TOKEN_EXP_DATE = 864_000_000;
-    public static final String SECRET = "you're gay";
-    public static final String HEADER = "auth_token";
+class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private AuthenticationManager authenticationManager;
+    private static final Logger log = Logger.getLogger(AuthenticationFilter.class);
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
+    private final AuthenticationManager authenticationManager;
+
+    AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
-    //Checks whether the user is valid
+    /**
+     On user login request, this function calls, extracts the user data and authenticates them
+     **/
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
-                                                HttpServletResponse res) throws AuthenticationException {
+                                                HttpServletResponse res) {
         try {
-            AppUser appUser = new ObjectMapper()
-                    .readValue(req.getInputStream(), AppUser.class);
+            log.info("Attempting to authenticate");
+            User user = new ObjectMapper().readValue(req.getInputStream(), User.class);
 
-            // TODO checkout authorities
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            appUser.getUsername(),
-                            appUser.getPassword(),
-                            new ArrayList<>())
+            UsernamePasswordAuthenticationToken token =
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), new ArrayList<>());
+            token.setDetails(user);
 
+            //Authenticating the user
+            return authenticationManager.authenticate(token);
 
-            );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Error authenticating: " + e);
+            return new UsernamePasswordAuthenticationToken(null, null, null);
         }
     }
+
+    /**
+        Handles token creation
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult){
 
+        //Extracting the user
+        UserCredentials user = (UserCredentials) authResult.getPrincipal();
+        log.info("Creating token for userId=" + user.getId());
+
+        //Creating the token
         String token = Jwts.builder()
-                .setSubject(((User) (authResult.getPrincipal())).getUsername())
+                .claim(CLAIM_USER_ID, user.getId())
+                .claim(CLAIM_USER_NAME, user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXP_DATE))
                 .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
                 .compact();
 
+        //Adding token to the header of the response
         response.addHeader(HEADER, token);
     }
 }

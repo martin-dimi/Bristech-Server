@@ -1,6 +1,7 @@
 package com.bristech.security;
 
 import io.jsonwebtoken.Jwts;
+import org.apache.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,14 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.bristech.security.AuthenticationFilter.HEADER;
-import static com.bristech.security.AuthenticationFilter.SECRET;
-import static java.util.Collections.emptyList;
-
-public class AuthorizationFilter extends BasicAuthenticationFilter {
+import static com.bristech.config.Configuration.*;
 
 
-    public AuthorizationFilter(AuthenticationManager authenticationManager) {
+class AuthorizationFilter extends BasicAuthenticationFilter {
+
+    private static final Logger log = Logger.getLogger(AuthenticationFilter.class);
+
+
+    AuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
 
@@ -30,9 +32,12 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
 
+        log.info("Attempting to authorise user");
+
         //getting header and checking if it's valid
         String header = request.getHeader(HEADER);
         if(header == null){
+            log.error("Could not find token in the header");
             chain.doFilter(request, response);
             return;
         }
@@ -53,9 +58,11 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
                     .setSigningKey(SECRET.getBytes())
                     .parseClaimsJws(token)
                     .getBody()
-                    .getSubject();
+                    .get(CLAIM_USER_NAME, String.class);
 
-            System.out.println("------ " + user);
+            log.info("Authenticating user:" + user);
+
+
             if (user != null)
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             }

@@ -1,11 +1,13 @@
 package com.bristech.entities;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("WeakerAccess")
 @Entity
 @Table(name = "users")
-public class AppUser {
+public class User {
 
     //This is the user class
 
@@ -24,15 +26,8 @@ public class AppUser {
     private String lastName;
 
 
-    public AppUser() {
+    public User() {
         //for Hibernate
-    }
-
-    public AppUser(String username, String email, String firstName, String lastName) {
-        this.username = username;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
     }
 
     public Long getId() {

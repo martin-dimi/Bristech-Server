@@ -10,8 +10,12 @@ import java.util.List;
 @Service
 public class EventServiceDefault implements EventService {
 
+    private final EventRepository eventRepo;
+
     @Autowired
-    private EventRepository eventRepo;
+    public EventServiceDefault(EventRepository eventRepo) {
+        this.eventRepo = eventRepo;
+    }
 
     @Override
     public List<Event> getAllEvents() {

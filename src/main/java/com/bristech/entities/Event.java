@@ -2,6 +2,7 @@ package com.bristech.entities;
 
 import javax.persistence.*;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "events")
 public class Event {
