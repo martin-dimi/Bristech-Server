@@ -1,10 +1,10 @@
 package com.bristech.repositories;
 
-import com.bristech.entities.User;
+import com.bristech.entities.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<AppUser, Long> {
 
-    User getUserByUsername(String username);
+    AppUser getUserByUsername(String username);
 
 }

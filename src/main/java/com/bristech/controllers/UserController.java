@@ -1,7 +1,7 @@
 package com.bristech.controllers;
 
 
-import com.bristech.entities.User;
+import com.bristech.entities.AppUser;
 import com.bristech.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,24 +16,24 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<User> getAllUsers(){
+    public List<AppUser> getAllUsers(){
         return userService.getAllUsers();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public User getUserById(@PathVariable long id){
+    public AppUser getUserById(@PathVariable long id){
         System.out.println("Get user by id CALLING, id=" + id);
         return userService.getUserById(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/username/{username}")
-    public User getUserByUsername(@PathVariable String username){
+    public AppUser getUserByUsername(@PathVariable String username){
         return userService.getUserByUsername(username);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void createUser(@RequestBody User user){
-        userService.createUser(user);
+    public void createUser(@RequestBody AppUser appUser){
+        userService.createUser(appUser);
     }
 
 

@@ -1,39 +1,53 @@
 package com.bristech.service;
 
-import com.bristech.entities.User;
+import com.bristech.entities.AppUser;
 import com.bristech.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
-public class UserServiceDefault implements UserService {
+public class UserServiceDefault implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepo;
 
     @Override
-    public List<User> getAllUsers() {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUser user = userRepo.getUserByUsername(username);
+        if(user == null)
+            throw new UsernameNotFoundException(username);
+
+        return new User(user.getUsername(), user.getPassword(), Collections.emptyList());
+    }
+
+    @Override
+    public List<AppUser> getAllUsers() {
         return userRepo.findAll();
     }
 
     @Override
-    public User getUserById(long id) {
+    public AppUser getUserById(long id) {
         //Todo does the user exist?
         return userRepo.findOne(id);
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public AppUser getUserByUsername(String username) {
         //TODO check if user exists
         return userRepo.getUserByUsername(username);
     }
 
 
     @Override
-    public void createUser(User user) {
-        userRepo.save(user);
+    public void createUser(AppUser appUser) {
+        userRepo.save(appUser);
     }
 
     @Override
@@ -42,4 +56,6 @@ public class UserServiceDefault implements UserService {
         //Todo Is the user an Admin
         userRepo.delete(id);
     }
+
+
 }

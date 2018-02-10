@@ -11,10 +11,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.bristech.security.AuthenticationFilter.HEADER;
 import static com.bristech.security.AuthenticationFilter.SECRET;
-import static com.bristech.security.AuthenticationFilter.TOKEN_PREFIX;
 import static java.util.Collections.emptyList;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
@@ -32,7 +32,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
         //getting header and checking if it's valid
         String header = request.getHeader(HEADER);
-        if(header == null || !header.startsWith(TOKEN_PREFIX)){
+        if(header == null){
             chain.doFilter(request, response);
             return;
         }
@@ -51,12 +51,13 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             // parse the token.
             String user = Jwts.parser()
                     .setSigningKey(SECRET.getBytes())
-                    .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                    .parseClaimsJws(token)
                     .getBody()
                     .getSubject();
 
+            System.out.println("------ " + user);
             if (user != null)
-                return new UsernamePasswordAuthenticationToken(user, null);
+                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             }
         return null;
     }

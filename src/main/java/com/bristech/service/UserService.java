@@ -1,15 +1,15 @@
 package com.bristech.service;
 
-import com.bristech.entities.User;
+import com.bristech.entities.AppUser;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<User> getAllUsers();
-    User getUserById(long id);
-    User getUserByUsername(String username);
-    void createUser(User user);
+    List<AppUser> getAllUsers();
+    AppUser getUserById(long id);
+    AppUser getUserByUsername(String username);
+    void createUser(AppUser appUser);
     void deleteUserById(long id);
 
 }

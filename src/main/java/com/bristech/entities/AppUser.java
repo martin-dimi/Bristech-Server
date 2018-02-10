@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class AppUser {
 
     //This is the user class
 
@@ -24,11 +24,11 @@ public class User {
     private String lastName;
 
 
-    public User() {
+    public AppUser() {
         //for Hibernate
     }
 
-    public User(String username, String email, String firstName, String lastName) {
+    public AppUser(String username, String email, String firstName, String lastName) {
         this.username = username;
         this.email = email;
         this.firstName = firstName;
