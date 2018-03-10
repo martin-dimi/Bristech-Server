@@ -22,13 +22,11 @@ repositories {
 }
 
 jar {
-    baseName = 'gs-rest-service'
-    version =  '0.1.0'
+    baseName = 'bristech'
 }
 
-build.mustRunAfter clean
 task stage {
-    dependsOn('build')
+    dependsOn build
 }
 
 sourceCompatibility = 1.8
