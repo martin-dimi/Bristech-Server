@@ -26,9 +26,10 @@ jar {
     version =  '0.1.0'
 }
 
-task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
-
+task stage {
+    dependsOn('build', 'clean', 'installDist')
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
