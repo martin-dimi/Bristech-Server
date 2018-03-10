@@ -1,11 +1,10 @@
 package com.bristech.service;
 
 import com.bristech.entities.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService extends UserDetailsService {
+public interface UserService{
 
     List<User> getAllUsers();
 

@@ -14,20 +14,21 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotNull
-    private String username;
-    @NotNull
-    private String password;
+
     @NotNull
     private String email;
-    @Column(name = "first_name")
+    @Column(name = "name")
     private String firstName;
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "backdrop")
+    private String picture;
 
 
     public User() {
         //for Hibernate
+    }
+
+    public User(String email) {
+        this.email = email;
     }
 
     public Long getId() {
@@ -36,14 +37,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
@@ -62,19 +55,11 @@ public class User {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPicture() {
+        return picture;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

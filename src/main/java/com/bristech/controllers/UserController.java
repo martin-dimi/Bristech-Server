@@ -3,16 +3,15 @@ package com.bristech.controllers;
 
 import com.bristech.entities.User;
 import com.bristech.service.UserService;
-import io.jsonwebtoken.Jwts;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static com.bristech.config.ControllerConfiguration.*;
-import static com.bristech.config.JWTConfiguration.*;
 
 
 @RestController
@@ -20,24 +19,30 @@ import static com.bristech.config.JWTConfiguration.*;
 public class UserController {
 
     private UserService userService;
-    private BCryptPasswordEncoder bCrypt;
+    private final FirebaseAuth firebase;
+
 
     @Autowired
-    public UserController(UserService userService, BCryptPasswordEncoder bCrypt) {
+    public UserController(UserService userService, FirebaseAuth firebase) {
         this.userService = userService;
-        this.bCrypt = bCrypt;
+        this.firebase = firebase;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public User getUser(HttpServletRequest request) {
-        String token = request.getHeader(HEADER);
-        long userId = Jwts.parser()
-                .setSigningKey(SECRET.getBytes())
-                .parseClaimsJws(token)
-                .getBody()
-                .get(CLAIM_USER_ID, Integer.class);
+    public User getUser(@RequestHeader("token") String token) throws ExecutionException, InterruptedException {
+        User user = null;
 
-        return userService.getUserById(userId);
+        if(token != null && !token.equals("")){
+            FirebaseToken decodedToken = firebase.verifyIdTokenAsync(token).get();
+            String email = decodedToken.getEmail();
+            user = userService.getUserByUsername(email);
+            if(user == null) {
+                user = new User(email);
+                userService.createUser(user);
+            }
+        }
+
+        return user;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PATH_ALL)
@@ -50,11 +55,6 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = PATH_CREATE)
-    public void createUser(@RequestBody User user) {
-        user.setPassword(bCrypt.encode(user.getPassword()));
-        userService.createUser(user);
-    }
 
     //TODO add getUserByUsername and delete with query
 }

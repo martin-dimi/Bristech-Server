@@ -1,11 +1,8 @@
 package com.bristech.service;
 
 import com.bristech.entities.User;
-import com.bristech.entities.UserCredentials;
 import com.bristech.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,15 +15,6 @@ public class UserServiceDefault implements UserService {
     @Autowired
     public UserServiceDefault(UserRepository userRepo) {
         this.userRepo = userRepo;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.getUserByUsername(username);
-        if(user == null)
-            throw new UsernameNotFoundException(username);
-
-        return new UserCredentials(user);
     }
 
     @Override
@@ -43,7 +31,7 @@ public class UserServiceDefault implements UserService {
     @Override
     public User getUserByUsername(String username) {
         //TODO check if user exists
-        return userRepo.getUserByUsername(username);
+        return userRepo.getUserByEmail(username);
     }
 
 
