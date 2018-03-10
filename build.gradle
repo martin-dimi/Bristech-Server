@@ -28,7 +28,7 @@ jar {
 
 build.mustRunAfter clean
 task stage {
-    dependsOn('build', 'clean', 'installDist')
+    dependsOn('build', 'clean')
 }
 
 sourceCompatibility = 1.8
