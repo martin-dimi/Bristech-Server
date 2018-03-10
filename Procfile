@@ -1,1 +1,1 @@
-web: java -jar build/libs/bristech.jar
+web: java -jar build/libs/bristech_server.jar
