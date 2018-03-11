@@ -23,19 +23,7 @@ repositories {
 
 jar {
     baseName = 'bristech'
-}
-
-task stage(type: Copy, dependsOn: [clean, build]) {
-    from jar.archivePath
-    into project.rootDir
-    rename {
-        'app.jar'
-    }
-}
-stage.mustRunAfter(clean)
-
-clean << {
-    project.file('app.jar').delete()
+    version = '0.1.0'
 }
 
 sourceCompatibility = 1.8
@@ -53,4 +41,21 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.10.0")
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
+
+task stage(type: Copy, dependsOn: [clean, build]) {
+    from jar.archivePath
+    into project.rootDir
+    rename {
+        'app.jar'
+    }
+}
+stage.mustRunAfter(clean)
+
+clean << {
+    project.file('app.jar').delete()
 }
