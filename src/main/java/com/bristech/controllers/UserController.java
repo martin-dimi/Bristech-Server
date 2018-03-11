@@ -37,11 +37,11 @@ public class UserController {
         User user = null;
 
         if(token != null && !token.equals("")){
-            LOGGER.debug("token: " + token);
+            LOGGER.info("token: " + token);
             FirebaseToken decodedToken = firebase.verifyIdTokenAsync(token).get();
             String email = decodedToken.getEmail();
             String backdrop = decodedToken.getPicture();
-            LOGGER.debug("email: " + email);
+            LOGGER.info("email: " + email);
 
             user = userService.getUserByUsername(email);
             if(user == null) {
@@ -50,7 +50,7 @@ public class UserController {
                 user.setPicture(backdrop);
                 userService.createUser(user);
             }
-            LOGGER.debug("user: " + user.getFirstName());
+            LOGGER.info("user: " + user.getFirstName());
         }
 
         return user;
