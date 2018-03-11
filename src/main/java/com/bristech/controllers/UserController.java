@@ -41,11 +41,14 @@ public class UserController {
             LOGGER.debug("token: " + token);
             FirebaseToken decodedToken = firebase.verifyIdTokenAsync(token).get();
             String email = decodedToken.getEmail();
+            String backdrop = decodedToken.getPicture();
             LOGGER.debug("email: " + email);
 
             user = userService.getUserByUsername(email);
             if(user == null) {
-                user = new User(email);
+                user = new User();
+                user.setEmail(email);
+                user.setPicture(backdrop);
                 userService.createUser(user);
             }
             LOGGER.debug("user: " + user.getFirstName());
