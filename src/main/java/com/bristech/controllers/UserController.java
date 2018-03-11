@@ -26,7 +26,6 @@ public class UserController {
     private UserService userService;
     private final FirebaseAuth firebase;
 
-
     @Autowired
     public UserController(UserService userService, FirebaseAuth firebase) {
         this.userService = userService;
