@@ -25,9 +25,12 @@ jar {
     baseName = 'bristech'
 }
 
-task stage {
-    dependsOn build
+task copyToLib(type: Copy) {
+    into "$buildDir/lib"
+    from(configurations.compile)
 }
+
+stage.dependsOn(copyToLib)
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
