@@ -1,10 +1,13 @@
 package com.bristech.controllers;
 
 
+import com.bristech.config.FirebaseConfiguration;
 import com.bristech.entities.User;
 import com.bristech.service.UserService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,8 @@ import static com.bristech.config.ControllerConfiguration.*;
 @RestController
 @RequestMapping(value = USER_MAIN_URL)
 public class UserController {
+
+    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private UserService userService;
     private final FirebaseAuth firebase;
@@ -33,13 +38,17 @@ public class UserController {
         User user = null;
 
         if(token != null && !token.equals("")){
+            LOGGER.debug("token: " + token);
             FirebaseToken decodedToken = firebase.verifyIdTokenAsync(token).get();
             String email = decodedToken.getEmail();
+            LOGGER.debug("email: " + email);
+
             user = userService.getUserByUsername(email);
             if(user == null) {
                 user = new User(email);
                 userService.createUser(user);
             }
+            LOGGER.debug("user: " + user.getFirstName());
         }
 
         return user;
