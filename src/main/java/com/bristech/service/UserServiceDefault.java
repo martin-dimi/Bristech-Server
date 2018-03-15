@@ -56,6 +56,7 @@ public class UserServiceDefault implements UserService {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.warn("An error occur while getting user from token:" + token);
         }
 
