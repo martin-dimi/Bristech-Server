@@ -6,4 +6,4 @@ out
 *.ipr
 *.iws
 .DS_Store
-src/main/resources/firebase_pk.json
+#src/main/resources/firebase_pk.json
