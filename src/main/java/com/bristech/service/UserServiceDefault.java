@@ -66,7 +66,7 @@ public class UserServiceDefault implements UserService {
     @Override
     public User getUserFromEmail(String email) {
         User user;
-        if(!Strings.isNullOrEmpty(email)){
+        if(Strings.isNullOrEmpty(email)){
             LOGGER.warn("Email is empty");
             throw new IllegalArgumentException("Email is empty");
         }
