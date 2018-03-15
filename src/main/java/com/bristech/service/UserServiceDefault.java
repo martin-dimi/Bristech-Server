@@ -45,7 +45,7 @@ public class UserServiceDefault implements UserService {
             FirebaseToken decodedToken = firebase.verifyIdTokenAsync(token).get();
 
             String email = decodedToken.getEmail();
-            user = getUserFromEmail(email);
+            user = userRepo.getUserByEmail(email);
 
             if(user == null){
                 String name = decodedToken.getName();
