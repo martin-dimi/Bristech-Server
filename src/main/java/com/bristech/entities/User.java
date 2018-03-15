@@ -18,17 +18,19 @@ public class User {
     @NotNull
     private String email;
     @Column(name = "name")
-    private String firstName;
+    private String name;
     @Column(name = "backdrop")
-    private String picture;
+    private String backdrop;
 
 
     public User() {
         //for Hibernate
     }
 
-    public User(String email) {
+    public User(String email, String name, String backdrop) {
         this.email = email;
+        this.name = name;
+        this.backdrop = backdrop;
     }
 
     public Long getId() {
@@ -47,19 +49,19 @@ public class User {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getBackdrop() {
+        return backdrop;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setBackdrop(String backdrop) {
+        this.backdrop = backdrop;
     }
 }

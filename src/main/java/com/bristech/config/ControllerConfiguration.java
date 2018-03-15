@@ -9,4 +9,5 @@ public class ControllerConfiguration {
     public static final String PATH_LOGIN = "/login";
     public static final String PATH_ALL = "/all";
     public static final String PATH_ID = "/{id}";
+
 }

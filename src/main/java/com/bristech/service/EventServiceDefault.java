@@ -10,30 +10,4 @@ import java.util.List;
 @Service
 public class EventServiceDefault implements EventService {
 
-    private final EventRepository eventRepo;
-
-    @Autowired
-    public EventServiceDefault(EventRepository eventRepo) {
-        this.eventRepo = eventRepo;
-    }
-
-    @Override
-    public List<Event> getAllEvents() {
-        return eventRepo.findAll();
-    }
-
-    @Override
-    public Event getEventById(long id) {
-        return eventRepo.findOne(id);
-    }
-
-    @Override
-    public void createEvent(Event event) {
-        eventRepo.save(event);
-    }
-
-    @Override
-    public void deleteEventById(long id) {
-        eventRepo.delete(id);
-    }
 }

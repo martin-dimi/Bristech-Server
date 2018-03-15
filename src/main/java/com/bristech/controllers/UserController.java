@@ -1,10 +1,8 @@
 package com.bristech.controllers;
 
 
-import com.bristech.config.FirebaseConfiguration;
 import com.bristech.entities.User;
 import com.bristech.service.UserService;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -24,48 +22,42 @@ public class UserController {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private UserService userService;
-    private final FirebaseAuth firebase;
 
     @Autowired
-    public UserController(UserService userService, FirebaseAuth firebase) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.firebase = firebase;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public User getUser(@RequestHeader("token") String token) throws ExecutionException, InterruptedException {
-        User user = null;
-
-        if(token != null && !token.equals("")){
-            LOGGER.info("token: " + token);
-            FirebaseToken decodedToken = firebase.verifyIdTokenAsync(token).get();
-            String email = decodedToken.getEmail();
-            String backdrop = decodedToken.getPicture();
-            LOGGER.info("email: " + email);
-
-            user = userService.getUserByUsername(email);
-            if(user == null) {
-                user = new User();
-                user.setEmail(email);
-                user.setPicture(backdrop);
-                userService.createUser(user);
-            }
-            LOGGER.info("user: " + user.getFirstName());
-        }
-
+    /**
+     * Method that's called when SSO from app
+     * @param token Firebase ID Token
+     * @return the user found in the db or created
+     */
+    @RequestMapping(value = PATH_LOGIN, method = RequestMethod.GET)
+    public User getUser(@RequestHeader("token") String token){
+        User user = userService.getOrCreateUserFromToken(token);
+        LOGGER.info("Request user:" + user.getEmail());
+        // Extra logic here
         return user;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = PATH_ALL)
+    /**
+     * Method called by the app admin
+     * @return returns a list of all users
+     */
+    @RequestMapping(value = PATH_ALL, method = RequestMethod.GET)
     public List<User> getAllUsers() {
+        LOGGER.info("Request all users");
         return userService.getAllUsers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = PATH_ID)
-    public User getUserById(@PathVariable long id) {
-        return userService.getUserById(id);
+    /**
+     * Creates a given user
+     * @param user to be created
+     */
+    @RequestMapping(value = PATH_CREATE, method = RequestMethod.POST)
+    public void createUser(@RequestBody User user){
+        LOGGER.info("Request user creation:" + user.getEmail());
+        userService.createUser(user);
     }
-
-
-    //TODO add getUserByUsername and delete with query
 }
