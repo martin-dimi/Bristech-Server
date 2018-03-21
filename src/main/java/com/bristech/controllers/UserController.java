@@ -38,6 +38,7 @@ public class UserController {
         User user = userService.getOrCreateUserFromToken(token);
         LOGGER.info("Request user:" + user.getEmail());
         // Extra logic here
+        //TODO return 401 if error
         return user;
     }
 
@@ -48,6 +49,8 @@ public class UserController {
     @RequestMapping(value = PATH_ALL, method = RequestMethod.GET)
     public List<User> getAllUsers() {
         LOGGER.info("Request all users");
+        //TODO return 401 if error
+
         return userService.getAllUsers();
     }
 
@@ -58,6 +61,8 @@ public class UserController {
     @RequestMapping(value = PATH_CREATE, method = RequestMethod.POST)
     public void createUser(@RequestBody User user){
         LOGGER.info("Request user creation:" + user.getEmail());
+        //TODO return 401 if error
+
         userService.createUser(user);
     }
 }
