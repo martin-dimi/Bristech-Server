@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -35,6 +36,16 @@ public class EventController {
         //TODO event logic
         //TODO return 401 if error
         return events;
+    }
+
+    @RequestMapping(value = "/meetup", method = RequestMethod.GET)
+    public String getEmployees(){
+        final String uri = "https://api.meetup.com/bristech/events?page=20&sig_id=250691112&sig=35e5ab975c6a2a217eedb6aeef7faacae5965005";
+
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.getForObject(uri, String.class);
+
+        return result;
     }
 
 }
