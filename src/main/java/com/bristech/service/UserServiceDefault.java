@@ -1,20 +1,16 @@
 package com.bristech.service;
 
-import com.bristech.controllers.UserController;
 import com.bristech.entities.User;
 import com.bristech.repositories.UserRepository;
 import com.google.common.base.Strings;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.hibernate.criterion.NotNullExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserServiceDefault implements UserService {

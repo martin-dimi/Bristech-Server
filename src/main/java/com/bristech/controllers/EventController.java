@@ -1,51 +1,79 @@
 package com.bristech.controllers;
 
 import com.bristech.entities.Event;
-import com.bristech.entities.User;
 import com.bristech.service.EventService;
+import com.bristech.utils.EventsUtils;
+import com.bristech.utils.MeetupUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
 import java.util.List;
 
-import static com.bristech.config.ControllerConfiguration.EVENT_MAIN_URL;
-import static com.bristech.config.ControllerConfiguration.PATH_ALL;
-import static com.bristech.config.ControllerConfiguration.PATH_LOGIN;
+import static com.bristech.config.ControllerConfiguration.*;
 
-
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping(value = EVENT_MAIN_URL)
 public class EventController {
 
-    public static final String TAG = "EventController";
-
-    private EventService mEventService;
+    private static final Logger LOGGER = LogManager.getLogger(EventController.class);
+    private final EventService mEventService;
 
     @Autowired
     public EventController(EventService mEventService) {
         this.mEventService = mEventService;
     }
 
-    @RequestMapping(value = PATH_ALL, method = RequestMethod.GET)
-    public List<Event> getAllEvents(){
-        List<Event> events = mEventService.getAllEvents();
-        //TODO event logic
-        //TODO return 401 if error
-        return events;
+    @RequestMapping(value = PATH_UPCOMING, method = RequestMethod.GET)
+    public ResponseEntity<List<Event>> getUpcomingEvents(HttpServletRequest request) {
+        LOGGER.info("Request UPCOMING EVENTS from " + request.getRemoteAddr());
+        List<Event> events = mEventService.getUpcomingEvents();
+
+        if (events == null || events.size() == 0) {
+            LOGGER.warn("No events where found.");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = PATH_PAST, method = RequestMethod.GET)
+    public ResponseEntity<List<Event>> getPastEvents(HttpServletRequest request) {
+        LOGGER.info("Request PAST EVENTS from " + request.getRemoteAddr());
+        List<Event> events = mEventService.getPastEvents();
+
+        if (events == null || events.size() == 0) {
+            LOGGER.warn("No events where found.");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/meetup", method = RequestMethod.GET)
-    public String getEmployees(){
-        final String uri = "https://api.meetup.com/bristech/events?page=20&sig_id=250691112&sig=35e5ab975c6a2a217eedb6aeef7faacae5965005";
+    public ResponseEntity<String> getEmployees() {
 
-        RestTemplate restTemplate = new RestTemplate();
-        String result = restTemplate.getForObject(uri, String.class);
+        URL url = MeetupUtils.getUpcomingEventsURL();
+        String result = MeetupUtils.getResponseFromURL(url);
+        List<Event> events = EventsUtils.getEventsFromJSON(result);
 
-        return result;
+        if (events != null) {
+            mEventService.updateEvents(events);
+            LOGGER.info("Successfully updated " + events.size() + "events from Meetup.");
+            return new ResponseEntity<>("Successfully updated events from Meetup.", HttpStatus.OK);
+        } else {
+            LOGGER.info("Couldn't retrieve events from Meetup.");
+            return new ResponseEntity<>("Couldn't update events from Meetup", HttpStatus.I_AM_A_TEAPOT);
+        }
+
     }
 
 }

@@ -1,6 +1,5 @@
 package com.bristech.service;
 
-import com.bristech.controllers.UserController;
 import com.bristech.entities.Event;
 import com.bristech.repositories.EventRepository;
 import org.apache.log4j.LogManager;
@@ -15,8 +14,10 @@ import java.util.List;
 public class EventServiceDefault implements EventService {
 
     private static final Logger LOGGER = LogManager.getLogger(EventServiceDefault.class);
+    private static final String EVENTS_UPCOMING = "upcoming";
+    private static final String EVENTS_PAST = "past";
 
-    private EventRepository mEventRepository;
+    private final EventRepository mEventRepository;
 
     @Autowired
     public EventServiceDefault(EventRepository mEventRepository) {
@@ -25,14 +26,49 @@ public class EventServiceDefault implements EventService {
 
     @Override
     public List<Event> getAllEvents() {
-        List<Event> events = null;
+        List<Event> events;
         events = mEventRepository.findAll();
 
-        if(events == null){
+        if (events == null) {
             LOGGER.warn("Events are null");
             events = new ArrayList<>();
         }
 
         return events;
     }
+
+    @Override
+    public List<Event> getUpcomingEvents() {
+        List<Event> events;
+        events = mEventRepository.findByMStatus(EVENTS_UPCOMING);
+
+        if (events == null) {
+            LOGGER.warn("There are no upcoming events.");
+            events = new ArrayList<>();
+        }
+
+        return events;
+    }
+
+    @Override
+    public List<Event> getPastEvents() {
+        List<Event> events;
+        events = mEventRepository.findByMStatus(EVENTS_PAST);
+
+        if (events == null) {
+            LOGGER.warn("There are no past events");
+            events = new ArrayList<>();
+        }
+
+        return events;
+    }
+
+    @Override
+    public void updateEvents(List<Event> events) {
+        if (!(events == null || events.size() == 0)) {
+            mEventRepository.save(events);
+        }
+    }
+
+
 }

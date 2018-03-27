@@ -8,6 +8,7 @@ public class ControllerConfiguration {
     public static final String PATH_CREATE = "/create";
     public static final String PATH_LOGIN = "/login";
     public static final String PATH_ALL = "/all";
-    public static final String PATH_ID = "/{id}";
+    public static final String PATH_UPCOMING = "/upcoming";
+    public static final String PATH_PAST = "/past";
 
 }

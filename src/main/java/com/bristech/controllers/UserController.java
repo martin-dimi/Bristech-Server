@@ -3,25 +3,24 @@ package com.bristech.controllers;
 
 import com.bristech.entities.User;
 import com.bristech.service.UserService;
-import com.google.firebase.auth.FirebaseToken;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static com.bristech.config.ControllerConfiguration.*;
 
 
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping(value = USER_MAIN_URL)
 public class UserController {
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {

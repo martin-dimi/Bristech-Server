@@ -1,6 +1,13 @@
+
 package com.bristech.entities;
 
-import javax.persistence.*;
+import com.google.gson.annotations.SerializedName;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Date;
 
 @SuppressWarnings("unused")
 @Entity
@@ -8,81 +15,106 @@ import javax.persistence.*;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String title;
-    private String location;
-    private String date;
-    private String time;
-    private String description;
-    private String backdrop;
+    @SerializedName("id")
+    @Column(name = "id")
+    private Long mId;
 
-    public Event() {
-        //for Hibernate
-    }
+    @SerializedName("name")
+    @Column(name = "name")
+    private String mName;
 
-    public Event(String title, String location, String date, String time, String description, String backdrop) {
-        this.title = title;
-        this.location = location;
-        this.date = date;
-        this.time = time;
-        this.description = description;
-        this.backdrop = backdrop;
-    }
+    @SerializedName("description")
+    @Column(name = "description")
+    private String mDescription;
 
-    public Long getId() {
-        return id;
-    }
+    @SerializedName("time")
+    @Column(name = "time")
+    private Date mTime;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @SerializedName("duration")
+    @Column(name = "duration")
+    private Long mDuration;
 
-    public String getTitle() {
-        return title;
-    }
+    @SerializedName("waitlist_count")
+    @Column(name = "waitlist_count")
+    private Long mWaitlistCount;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @SerializedName("status")
+    @Column(name = "status")
+    private String mStatus;
 
-    public String getLocation() {
-        return location;
-    }
+    @SerializedName("event_url")
+    @Column(name = "url")
+    private String mEventUrl;
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        mDescription = description;
     }
 
-    public String getBackdrop() {
-        return backdrop;
+    public Long getDuration() {
+        return mDuration;
     }
 
-    public void setBackdrop(String backdrop) {
-        this.backdrop = backdrop;
+    public void setDuration(Long duration) {
+        mDuration = duration;
+    }
+
+    public String getEventUrl() {
+        return mEventUrl;
+    }
+
+    public void setEventUrl(String eventUrl) {
+        mEventUrl = eventUrl;
+    }
+
+    public Long getId() {
+        return mId;
+    }
+
+    public void setId(Long id) {
+        mId = id;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public String getStatus() {
+        return mStatus;
+    }
+
+    public void setStatus(String status) {
+        mStatus = status;
+    }
+
+    public Date getTime() {
+        return mTime;
+    }
+
+    public void setTime(Date time) {
+        mTime = time;
+    }
+
+    public Long getWaitlistCount() {
+        return mWaitlistCount;
+    }
+
+    public void setWaitlistCount(Long waitlistCount) {
+        mWaitlistCount = waitlistCount;
+    }
+
+    @Override
+    public String toString() {
+        return mName;
     }
 }

@@ -4,7 +4,7 @@ package com.bristech.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "users")
 public class User {
