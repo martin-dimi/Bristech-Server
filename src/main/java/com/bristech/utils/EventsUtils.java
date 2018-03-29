@@ -4,7 +4,6 @@ import com.bristech.entities.Event;
 import com.google.common.base.Strings;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.sun.javafx.event.EventUtil;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class EventsUtils {
 
-    private static final Logger LOGGER = LogManager.getLogger(EventUtil.class);
+    private static final Logger LOGGER = LogManager.getLogger(EventsUtils.class);
     private static final String ELEM_RESULT = "results";
     private static final String DATE_FORMAT = "EEE MMM dd yyyy HH:mm:ss Z";
 

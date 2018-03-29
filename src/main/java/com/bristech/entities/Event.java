@@ -2,14 +2,12 @@
 package com.bristech.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.SerializedName;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @SuppressWarnings("unused")
 @Entity
