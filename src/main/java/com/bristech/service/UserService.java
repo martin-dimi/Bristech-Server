@@ -11,6 +11,8 @@ public interface UserService{
 
     User getOrCreateUserFromToken(String token);
 
+    User getUserFromToken(String token);
+
     User getUserFromEmail(String email);
 
     void createUser(User user);

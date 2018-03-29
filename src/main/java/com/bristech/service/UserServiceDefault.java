@@ -60,6 +60,23 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
+    public User getUserFromToken(String token) {
+        User user = null;
+
+        try {
+            FirebaseToken decodedToken = firebase.verifyIdTokenAsync(token).get();
+
+            String email = decodedToken.getEmail();
+            user = userRepo.getUserByEmail(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.warn("An error occur while getting user from token:" + token);
+        }
+
+        return user;
+    }
+
+    @Override
     public User getUserFromEmail(String email) {
         User user;
         if(Strings.isNullOrEmpty(email)){

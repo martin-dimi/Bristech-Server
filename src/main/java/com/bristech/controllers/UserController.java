@@ -6,6 +6,7 @@ import com.bristech.service.UserService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class UserController {
         User user = userService.getOrCreateUserFromToken(token);
         LOGGER.info("Request user:" + user.getEmail());
         // Extra logic here
-        //TODO return 401 if error
+        //TODO return appropriate responseentity see eventController
         return user;
     }
 
@@ -48,7 +49,7 @@ public class UserController {
     @RequestMapping(value = PATH_ALL, method = RequestMethod.GET)
     public List<User> getAllUsers() {
         LOGGER.info("Request all users");
-        //TODO return 401 if error
+        //TODO return appropriate responseentity see eventController
 
         return userService.getAllUsers();
     }
@@ -60,7 +61,7 @@ public class UserController {
     @RequestMapping(value = PATH_CREATE, method = RequestMethod.POST)
     public void createUser(@RequestBody User user){
         LOGGER.info("Request user creation:" + user.getEmail());
-        //TODO return 401 if error
+        //TODO return appropriate responseentity see eventController
 
         userService.createUser(user);
     }

@@ -1,7 +1,9 @@
 package com.bristech.service;
 
 import com.bristech.entities.Event;
+import com.bristech.entities.User;
 import com.bristech.repositories.EventRepository;
+import com.bristech.repositories.UserRepository;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,13 @@ public class EventServiceDefault implements EventService {
     private static final String EVENTS_PAST = "past";
 
     private final EventRepository mEventRepository;
+    private final UserRepository mUserRepo;
+
 
     @Autowired
-    public EventServiceDefault(EventRepository mEventRepository) {
+    public EventServiceDefault(EventRepository mEventRepository, UserRepository mUserRepo) {
         this.mEventRepository = mEventRepository;
+        this.mUserRepo = mUserRepo;
     }
 
     @Override
@@ -40,7 +45,7 @@ public class EventServiceDefault implements EventService {
     @Override
     public List<Event> getUpcomingEvents() {
         List<Event> events;
-        events = mEventRepository.findByMStatus(EVENTS_UPCOMING);
+        events = mEventRepository.findByStatus(EVENTS_UPCOMING);
 
         if (events == null) {
             LOGGER.warn("There are no upcoming events.");
@@ -53,7 +58,7 @@ public class EventServiceDefault implements EventService {
     @Override
     public List<Event> getPastEvents() {
         List<Event> events;
-        events = mEventRepository.findByMStatus(EVENTS_PAST);
+        events = mEventRepository.findByStatus(EVENTS_PAST);
 
         if (events == null) {
             LOGGER.warn("There are no past events");
@@ -64,11 +69,37 @@ public class EventServiceDefault implements EventService {
     }
 
     @Override
+    public Event getEventById(long eventId) {
+        Event event;
+
+        // TODO Create checks
+        event = mEventRepository.findOne(eventId);
+
+        return event;
+    }
+
+    @Override
+    public boolean userAttendEvent(User user, Event event) {
+
+        if(event == null){
+            LOGGER.warn("Couldn't find event!");
+            return false;
+        }
+
+
+        boolean isGoing = event.userAttendingEvent(user);
+        mEventRepository.save(event);
+
+        LOGGER.warn("WARN" + isGoing);
+        return isGoing;
+
+    }
+
+    @Override
     public void updateEvents(List<Event> events) {
         if (!(events == null || events.size() == 0)) {
             mEventRepository.save(events);
         }
     }
-
 
 }

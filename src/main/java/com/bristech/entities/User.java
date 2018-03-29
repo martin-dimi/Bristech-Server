@@ -1,8 +1,14 @@
 package com.bristech.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 @Entity
@@ -17,14 +23,21 @@ public class User {
 
     @NotNull
     private String email;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "backdrop")
     private String backdrop;
 
 
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Event> events;
+
     public User() {
         //for Hibernate
+        events = new ArrayList<>();
     }
 
     public User(String email, String name, String backdrop) {
@@ -63,5 +76,13 @@ public class User {
 
     public void setBackdrop(String backdrop) {
         this.backdrop = backdrop;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 }
