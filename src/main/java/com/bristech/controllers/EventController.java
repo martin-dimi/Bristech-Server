@@ -32,7 +32,8 @@ public class EventController {
         this.mEventService = mEventService;
     }
 
-    @RequestMapping(value = PATH_UPCOMING, method = RequestMethod.GET)
+    @RequestMapping(value = PATH_UPCOMING, method = RequestMethod.GET
+            ,produces = "application/json;charset=utf-8")
     public ResponseEntity<List<Event>> getUpcomingEvents(HttpServletRequest request) {
         LOGGER.info("Request UPCOMING EVENTS from " + request.getRemoteAddr());
         List<Event> events = mEventService.getUpcomingEvents();

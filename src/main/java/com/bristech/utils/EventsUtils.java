@@ -28,15 +28,16 @@ public class EventsUtils {
         List<Event> events;
         Gson gson = new GsonBuilder()
                 .setDateFormat(DATE_FORMAT)
+                .disableHtmlEscaping()
                 .registerTypeAdapter(Date.class,
                         (JsonDeserializer<Date>) (jsonElement, type, context) -> new Date(jsonElement.getAsJsonPrimitive().getAsLong()))
                 .create();
+
         JsonParser parser = new JsonParser();
 
         JsonObject response = (JsonObject) parser.parse(json);
         JsonArray eventsJson = response.getAsJsonArray(ELEM_RESULT);
-        events = gson.fromJson(eventsJson, new TypeToken<List<Event>>() {
-        }.getType());
+        events = gson.fromJson(eventsJson, new TypeToken<List<Event>>(){}.getType());
 
         return events;
     }

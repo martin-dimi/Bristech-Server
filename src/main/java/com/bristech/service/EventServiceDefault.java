@@ -42,6 +42,8 @@ public class EventServiceDefault implements EventService {
         List<Event> events;
         events = mEventRepository.findByMStatus(EVENTS_UPCOMING);
 
+        LOGGER.info(events.get(0).getDescription());
+
         if (events == null) {
             LOGGER.warn("There are no upcoming events.");
             events = new ArrayList<>();

@@ -6,7 +6,9 @@ import com.google.common.io.CharStreams;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.logging.log4j.core.util.IOUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,6 +16,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class MeetupUtils {
@@ -90,7 +94,10 @@ public class MeetupUtils {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             InputStream input = connection.getInputStream();
 
-            result = CharStreams.toString(new InputStreamReader(input, Charsets.UTF_8));
+            result = new BufferedReader(new InputStreamReader(input, "utf-8"))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
+
             connection.disconnect();
         } catch (IOException e) {
             LOGGER.error("Couldn't get a response from url");
