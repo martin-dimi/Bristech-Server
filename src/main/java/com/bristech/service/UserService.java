@@ -15,6 +15,6 @@ public interface UserService{
 
     User getUserFromEmail(String email);
 
-    void createUser(User user);
+    User createUser(User user);
 
 }

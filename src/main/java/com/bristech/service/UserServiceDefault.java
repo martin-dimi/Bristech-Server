@@ -94,7 +94,7 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
-    public void createUser(User user) {
+    public User createUser(User user) {
 
         if(user == null){
             LOGGER.error("User not saved. User is empty");
@@ -102,5 +102,6 @@ public class UserServiceDefault implements UserService {
         }
 
         userRepo.save(user);
+        return user;
     }
 }

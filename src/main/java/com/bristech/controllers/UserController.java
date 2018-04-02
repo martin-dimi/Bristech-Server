@@ -58,10 +58,10 @@ public class UserController {
      * @param user to be created
      */
     @RequestMapping(value = PATH_CREATE, method = RequestMethod.POST)
-    public void createUser(@RequestBody User user){
+    public User createUser(@RequestBody User user){
         LOGGER.info("Request user creation:" + user.getEmail());
         //TODO return appropriate responseentity see eventController
 
-        userService.createUser(user);
+        return userService.createUser(user);
     }
 }

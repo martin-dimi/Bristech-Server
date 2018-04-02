@@ -78,7 +78,7 @@ public class EventController {
     }
 
     @RequestMapping(value = PATH_EVENT_ATTEND, method = RequestMethod.POST)
-    public ResponseEntity<String> attendEvent(@RequestHeader("email") String email, @RequestHeader("event_id") long eventId){
+    public ResponseEntity<Boolean> attendEvent(@RequestHeader("email") String email, @RequestHeader("event_id") long eventId){
         LOGGER.info("Request USER ATTEND EVENT");
 
         User user = mUserService.getUserFromEmail(email);
@@ -95,8 +95,7 @@ public class EventController {
         }
 
         boolean isGoing = mEventService.userAttendEvent(user, event);
-        return new ResponseEntity<>(user.getName() + "is going to event:" + event.getName() + " " + isGoing,
-                HttpStatus.OK);
+        return new ResponseEntity<>(isGoing, HttpStatus.OK);
     }
 
     @RequestMapping(value = PATH_EVENT_UPDATE, method = RequestMethod.GET)
