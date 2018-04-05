@@ -40,26 +40,18 @@ public class Event {
     @Column(name = "url")
     private String eventUrl;
 
-    @ManyToMany()
-    @JoinTable(name = "user_event",
-            joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    @OneToMany(
+            mappedBy = "event",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @JsonBackReference
-    private List<User> users;
+    private List<EventUser> users;
 
     public Event() {
         users = new ArrayList<>();
     }
 
-    public boolean userAttendingEvent(User user){
-        if(!users.contains(user)) {
-            users.add(user);
-            return true;
-        } else {
-            users.remove(user);
-            return false;
-        }
-    }
 
     public Long getId() {
         return id;
@@ -125,11 +117,11 @@ public class Event {
         this.eventUrl = eventUrl;
     }
 
-    public List<User> getUsers() {
+    public List<EventUser> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(List<EventUser> users) {
         this.users = users;
     }
 }

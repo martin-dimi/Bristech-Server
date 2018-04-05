@@ -15,8 +15,6 @@ public interface EventService {
 
     Event getEventById(long eventId);
 
-    boolean userAttendEvent(User user, Event event);
-
     void updateEvents(List<Event> events);
 
 }

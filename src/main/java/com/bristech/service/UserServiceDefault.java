@@ -1,5 +1,6 @@
 package com.bristech.service;
 
+import com.bristech.entities.Event;
 import com.bristech.entities.User;
 import com.bristech.repositories.UserRepository;
 import com.google.common.base.Strings;
@@ -91,6 +92,34 @@ public class UserServiceDefault implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public boolean userRegisterForEvent(User user, Event event) {
+
+        if(event == null){
+            LOGGER.warn("Couldn't find event!");
+            return false;
+        }
+
+        boolean isRegistered = user.userRegisteringForEvent(event);
+        userRepo.save(user);
+
+        return isRegistered;
+    }
+
+    @Override
+    public boolean userAttendingEvent(User user, Event event) {
+
+        if(event == null){
+            LOGGER.warn("Couldn't find event!");
+            return false;
+        }
+
+        boolean isAttending = user.userAttendingEvent(event);
+        userRepo.save(user);
+
+        return isAttending;
     }
 
     @Override

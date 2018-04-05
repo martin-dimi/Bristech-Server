@@ -29,9 +29,13 @@ public class User {
     private String backdrop;
 
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @JsonManagedReference
-    private List<Event> events;
+    private List<EventUser> events;
 
     public User() {
         //for Hibernate
@@ -42,6 +46,33 @@ public class User {
         this.email = email;
         this.name = name;
         this.backdrop = backdrop;
+    }
+
+    public boolean userRegisteringForEvent(Event event){
+
+        long eventId = event.getId();
+
+        for (EventUser eventUser : events) {
+            if(eventUser.getEvent().getId().equals(eventId)) {
+                events.remove(eventUser);
+                return false;
+            }
+        }
+
+        EventUserId id = new EventUserId(eventId, this.id);
+        EventUser eventUser = new EventUser(id, event, this, false);
+        events.add(eventUser);
+        return true;
+    }
+
+    public boolean userAttendingEvent(Event event){
+        for (EventUser eventUser : events) {
+            if(eventUser.getEvent().getId().equals(event.getId())) {
+                eventUser.setAttended(true);
+                return true;
+            }
+        }
+        return false;
     }
 
     public Long getId() {
@@ -76,11 +107,11 @@ public class User {
         this.backdrop = backdrop;
     }
 
-    public List<Event> getEvents() {
+    public List<EventUser> getEvents() {
         return events;
     }
 
-    public void setEvents(List<Event> events) {
+    public void setEvents(List<EventUser> events) {
         this.events = events;
     }
 }

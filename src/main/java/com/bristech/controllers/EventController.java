@@ -29,12 +29,10 @@ public class EventController {
 
     private static final Logger LOGGER = LogManager.getLogger(EventController.class);
     private final EventService mEventService;
-    private final UserService mUserService;
 
     @Autowired
-    public EventController(EventService mEventService, UserService mUserService) {
+    public EventController(EventService mEventService) {
         this.mEventService = mEventService;
-        this.mUserService = mUserService;
     }
 
     @RequestMapping(value = PATH_ALL, method = RequestMethod.GET)
@@ -77,26 +75,6 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @RequestMapping(value = PATH_EVENT_ATTEND, method = RequestMethod.POST)
-    public ResponseEntity<Boolean> attendEvent(@RequestHeader("email") String email, @RequestHeader("event_id") long eventId){
-        LOGGER.info("Request USER ATTEND EVENT");
-
-        User user = mUserService.getUserFromEmail(email);
-
-        if(user == null){
-            LOGGER.warn("User doesn't exist");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Event event = mEventService.getEventById(eventId);
-        if(event == null){
-            LOGGER.warn("Event doesn't exist");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        boolean isGoing = mEventService.userAttendEvent(user, event);
-        return new ResponseEntity<>(isGoing, HttpStatus.OK);
-    }
 
     @RequestMapping(value = PATH_EVENT_UPDATE, method = RequestMethod.GET)
     public ResponseEntity<String> updateEventsFromMeetup() {

@@ -78,22 +78,6 @@ public class EventServiceDefault implements EventService {
         return event;
     }
 
-    @Override
-    public boolean userAttendEvent(User user, Event event) {
-
-        if(event == null){
-            LOGGER.warn("Couldn't find event!");
-            return false;
-        }
-
-
-        boolean isGoing = event.userAttendingEvent(user);
-        mEventRepository.save(event);
-
-        LOGGER.warn("WARN" + isGoing);
-        return isGoing;
-
-    }
 
     @Override
     public void updateEvents(List<Event> events) {
