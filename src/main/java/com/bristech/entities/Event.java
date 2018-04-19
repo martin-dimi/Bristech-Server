@@ -1,13 +1,13 @@
 
 package com.bristech.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.google.gson.annotations.SerializedName;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("unused")
 @Entity
@@ -15,106 +15,113 @@ import java.util.Date;
 public class Event {
 
     @Id
-    @SerializedName("id")
     @Column(name = "id")
-    private Long mId;
+    private Long id;
 
-    @SerializedName("name")
     @Column(name = "name")
-    private String mName;
+    private String name;
 
-    @SerializedName("description")
     @Column(name = "description")
-    private String mDescription;
+    private String description;
 
-    @SerializedName("time")
     @Column(name = "time")
-    private Date mTime;
+    private Date time;
 
-    @SerializedName("duration")
     @Column(name = "duration")
-    private Long mDuration;
+    private Long duration;
 
-    @SerializedName("waitlist_count")
     @Column(name = "waitlist_count")
-    private Long mWaitlistCount;
+    private Long waitlistCount;
 
-    @SerializedName("status")
     @Column(name = "status")
-    private String mStatus;
+    private String status;
 
     @SerializedName("event_url")
     @Column(name = "url")
-    private String mEventUrl;
+    private String eventUrl;
 
+    @OneToMany(
+            mappedBy = "event",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonBackReference
+    private List<EventUser> users;
 
-
-    public String getDescription() {
-        return mDescription;
+    public Event() {
+        users = new ArrayList<>();
     }
 
-    public void setDescription(String description) {
-        mDescription = description;
-    }
-
-    public Long getDuration() {
-        return mDuration;
-    }
-
-    public void setDuration(Long duration) {
-        mDuration = duration;
-    }
-
-    public String getEventUrl() {
-        return mEventUrl;
-    }
-
-    public void setEventUrl(String eventUrl) {
-        mEventUrl = eventUrl;
-    }
 
     public Long getId() {
-        return mId;
+        return id;
     }
 
     public void setId(Long id) {
-        mId = id;
+        this.id = id;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 
-    public String getStatus() {
-        return mStatus;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStatus(String status) {
-        mStatus = status;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getTime() {
-        return mTime;
+        return time;
     }
 
     public void setTime(Date time) {
-        mTime = time;
+        this.time = time;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
     }
 
     public Long getWaitlistCount() {
-        return mWaitlistCount;
+        return waitlistCount;
     }
 
     public void setWaitlistCount(Long waitlistCount) {
-        mWaitlistCount = waitlistCount;
+        this.waitlistCount = waitlistCount;
     }
 
-    @Override
-    public String toString() {
-        return mName;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getEventUrl() {
+        return eventUrl;
+    }
+
+    public void setEventUrl(String eventUrl) {
+        this.eventUrl = eventUrl;
+    }
+
+    public List<EventUser> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<EventUser> users) {
+        this.users = users;
     }
 }

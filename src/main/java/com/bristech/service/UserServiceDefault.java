@@ -1,5 +1,6 @@
 package com.bristech.service;
 
+import com.bristech.entities.Event;
 import com.bristech.entities.User;
 import com.bristech.repositories.UserRepository;
 import com.google.common.base.Strings;
@@ -60,6 +61,23 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
+    public User getUserFromToken(String token) {
+        User user = null;
+
+        try {
+            FirebaseToken decodedToken = firebase.verifyIdTokenAsync(token).get();
+
+            String email = decodedToken.getEmail();
+            user = userRepo.getUserByEmail(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.warn("An error occur while getting user from token:" + token);
+        }
+
+        return user;
+    }
+
+    @Override
     public User getUserFromEmail(String email) {
         User user;
         if(Strings.isNullOrEmpty(email)){
@@ -77,7 +95,35 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
-    public void createUser(User user) {
+    public boolean userRegisterForEvent(User user, Event event) {
+
+        if(event == null){
+            LOGGER.warn("Couldn't find event!");
+            return false;
+        }
+
+        boolean isRegistered = user.userRegisteringForEvent(event);
+        userRepo.save(user);
+
+        return isRegistered;
+    }
+
+    @Override
+    public boolean userAttendingEvent(User user, Event event) {
+
+        if(event == null){
+            LOGGER.warn("Couldn't find event!");
+            return false;
+        }
+
+        boolean isAttending = user.userAttendingEvent(event);
+        userRepo.save(user);
+
+        return isAttending;
+    }
+
+    @Override
+    public User createUser(User user) {
 
         if(user == null){
             LOGGER.error("User not saved. User is empty");
@@ -85,5 +131,6 @@ public class UserServiceDefault implements UserService {
         }
 
         userRepo.save(user);
+        return user;
     }
 }

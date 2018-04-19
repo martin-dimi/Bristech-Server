@@ -9,6 +9,6 @@ import java.util.List;
 @SuppressWarnings("SpringDataMethodInconsistencyInspection")
 public interface EventRepository extends JpaRepository<Event, Long>{
 
-    List<Event> findByMStatus(String status);
+    List<Event> findByStatus(String status);
 
 }

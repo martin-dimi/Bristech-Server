@@ -1,7 +1,9 @@
 package com.bristech.controllers;
 
 import com.bristech.entities.Event;
+import com.bristech.entities.User;
 import com.bristech.service.EventService;
+import com.bristech.service.UserService;
 import com.bristech.utils.EventsUtils;
 import com.bristech.utils.MeetupUtils;
 import org.apache.log4j.LogManager;
@@ -9,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,8 +35,21 @@ public class EventController {
         this.mEventService = mEventService;
     }
 
-    @RequestMapping(value = PATH_UPCOMING, method = RequestMethod.GET
-            ,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = PATH_ALL, method = RequestMethod.GET)
+    public ResponseEntity<List<Event>> getAllEvents(HttpServletRequest request) {
+        LOGGER.info("Request UPCOMING EVENTS from " + request.getRemoteAddr());
+
+        List<Event> events = mEventService.getAllEvents();
+
+        if (events == null || events.size() == 0) {
+            LOGGER.warn("No events where found.");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = PATH_EVENT_UPCOMING, method = RequestMethod.GET)
     public ResponseEntity<List<Event>> getUpcomingEvents(HttpServletRequest request) {
         LOGGER.info("Request UPCOMING EVENTS from " + request.getRemoteAddr());
         List<Event> events = mEventService.getUpcomingEvents();
@@ -46,7 +62,7 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @RequestMapping(value = PATH_PAST, method = RequestMethod.GET)
+    @RequestMapping(value = PATH_EVENT_PAST, method = RequestMethod.GET)
     public ResponseEntity<List<Event>> getPastEvents(HttpServletRequest request) {
         LOGGER.info("Request PAST EVENTS from " + request.getRemoteAddr());
         List<Event> events = mEventService.getPastEvents();
@@ -59,8 +75,10 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/meetup", method = RequestMethod.GET)
-    public ResponseEntity<String> getEmployees() {
+
+    @RequestMapping(value = PATH_EVENT_UPDATE, method = RequestMethod.GET)
+    public ResponseEntity<String> updateEventsFromMeetup() {
+        LOGGER.info("Request UPDATE EVENTS");
 
         URL url = MeetupUtils.getUpcomingEventsURL();
         String result = MeetupUtils.getResponseFromURL(url);
@@ -76,6 +94,8 @@ public class EventController {
         }
 
     }
+
+
 
 }
 
