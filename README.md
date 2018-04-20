@@ -1,6 +1,5 @@
 # Bristech-Server
 
-# Bristech
 [![Crates.io](https://img.shields.io/crates/l/rustc-serialize.svg?maxAge=2592000)]()  [![Generic badge](https://img.shields.io/badge/license-Firebase-<red>.svg)](https://shields.io/)  [![Build status](https://travis-ci.org/google/licenseclassifier.svg?branch=master)](https://travis-ci.org/google/licenseclassifier)
 
 ## Aim
