@@ -99,6 +99,8 @@ public class UserController {
 
         if(user == null){
             LOGGER.warn("User doesn't exist");
+            System.out.println("User doesn't exist");
+
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

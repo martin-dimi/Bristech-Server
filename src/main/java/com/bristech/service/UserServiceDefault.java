@@ -113,10 +113,12 @@ public class UserServiceDefault implements UserService {
 
         if(event == null){
             LOGGER.warn("Couldn't find event!");
+            System.out.println("Couldn't find event!");
             return false;
         }
 
         boolean isAttending = user.userAttendingEvent(event);
+        System.out.println("User attending: " ++ isAttending);
         userRepo.save(user);
 
         return isAttending;

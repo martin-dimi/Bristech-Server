@@ -76,6 +76,9 @@ public class EventServiceDefault implements EventService {
 
         // TODO Create checks
         event = mEventRepository.findOne(eventId);
+        if(event != null){
+            System.out.println("EVENT FOUND");
+        }
 
         return event;
     }
