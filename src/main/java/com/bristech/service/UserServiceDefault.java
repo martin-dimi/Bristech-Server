@@ -118,7 +118,7 @@ public class UserServiceDefault implements UserService {
         }
 
         boolean isAttending = user.userAttendingEvent(event);
-        System.out.println("User attending: " ++ isAttending);
+        System.out.println("User attending: " + isAttending);
         userRepo.save(user);
 
         return isAttending;
