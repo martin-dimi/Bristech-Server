@@ -93,6 +93,8 @@ public class UserController {
     public ResponseEntity<Boolean> attendEvent(@RequestHeader("email") String email, @RequestHeader("event_id") long eventId){
         LOGGER.info("Request USER ATTEND EVENT");
 
+        System.out.println("REQEUST IS WORKING!");
+
         User user = userService.getUserFromEmail(email);
 
         if(user == null){
