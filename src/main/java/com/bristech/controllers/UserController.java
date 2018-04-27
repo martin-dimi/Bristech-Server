@@ -106,7 +106,7 @@ public class UserController {
 
         Event event = eventService.getEventById(eventId);
 
-        boolean isGoing = userService.userAttendingEvent(user, event);
+        boolean isGoing = userService.userRegisterForEvent(user, event);
         LOGGER.info(isGoing);
         return new ResponseEntity<>(isGoing, HttpStatus.OK);
     }
