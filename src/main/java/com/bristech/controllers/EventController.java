@@ -80,11 +80,14 @@ public class EventController {
     public ResponseEntity<String> updateEventsFromMeetup() {
         LOGGER.info("Request UPDATE EVENTS");
 
-        URL url = MeetupUtils.getUpcomingEventsURL();
+        URL url = MeetupUtils.getAllEventsURL();
         String result = MeetupUtils.getResponseFromURL(url);
+
         List<Event> events = EventsUtils.getEventsFromJSON(result);
 
         if (events != null) {
+            System.out.println("It's in");
+            System.out.println("Event size is:" + events.size());
             mEventService.updateEvents(events);
             LOGGER.info("Successfully updated " + events.size() + "events from Meetup.");
             return new ResponseEntity<>("Successfully updated events from Meetup.", HttpStatus.OK);
